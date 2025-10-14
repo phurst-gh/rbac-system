@@ -1,4 +1,4 @@
-api/node_modules/
-api/generated/
+node_modules/
+generated/
 
 .env
