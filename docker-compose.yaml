@@ -1,0 +1,18 @@
+services:
+  db:
+    container_name: container_postgres_dev
+    image: postgres:16
+    env_file: ./api/.env                    # must include POSTGRES_USER/POSTGRES_PASSWORD/POSTGRES_DB
+    ports:
+      - "5432:5432"
+    volumes:
+      - data_postgres_dev:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
+volumes:
+  data_postgres_dev:
