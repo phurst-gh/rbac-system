@@ -23,7 +23,11 @@
     "outDir": "./dist",
     "rootDir": "./",
     "resolveJsonModule": true,
-    "allowImportingTsExtensions": false
+    "allowImportingTsExtensions": false,
+    "baseUrl": "./",
+    "paths": {
+      "@/env": ["env.ts"]
+    }
   },
   "include": [
     "src/**/*",
