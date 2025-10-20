@@ -1,6 +1,11 @@
 import type express from "express";
 import { Router } from "express";
-import { hashPassword, validateEmail, validatePassword } from "../controllers/userController";
+import {
+  createUser,
+  hashPassword,
+  validateEmail,
+  validatePassword,
+} from "../controllers/userController";
 import { asyncHandler } from "../handlers/asyncHandler";
 
 const router: express.Router = Router();
@@ -16,6 +21,7 @@ router.post(
   asyncHandler(validateEmail),
   asyncHandler(validatePassword),
   asyncHandler(hashPassword),
+  asyncHandler(createUser),
 );
 
 export default router;
