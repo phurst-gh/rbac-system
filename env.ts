@@ -1,17 +1,17 @@
 /**
  * Environment Variable Validation
- * 
+ *
  * This file provides type-safe, validated access to environment variables.
- * 
+ *
  * 1. App crashes at startup (not runtime) if misconfigured
  * 2. All env vars are properly typed - no more `process.env.PORT || 3000`
- * 
+ *
  * How it works:
  * - Load appropriate .env file based on APP_STAGE (dev/test/prod)
  * - Define Zod schema with all required/optional environment variables
  * - Parse process.env against schema, with helpful error messages
  * - Export typed `env` object that's guaranteed to have valid values
- * 
+ *
  * Usage:
  * 1. Import this file into index.ts
  * 2. Instead of `server.listen({ port: 3000 }, ...})`, use `server.listen({ port: env.PORT }, ...})`

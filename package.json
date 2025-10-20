@@ -2,10 +2,10 @@
   "name": "rbac-auth-api-gateway",
   "version": "1.0.0",
   "description": "Showcases a production secrure RBAC system",
-  "main": "server.js",
+  "main": "start.ts",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch src/start.ts",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "lint": "biome lint .",
@@ -21,6 +21,8 @@
   "license": "ISC",
   "devDependencies": {
     "@biomejs/biome": "^2.2.6",
+    "@types/bcrypt": "^5.0.2",
+    "@types/express": "^4.17.21",
     "@types/node": "^24.6.0",
     "pino-pretty": "^13.1.1",
     "prisma": "6.16.3",
@@ -29,8 +31,17 @@
   },
   "dependencies": {
     "@prisma/client": "6.16.3",
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
     "dotenv": "^17.2.3",
-    "fastify": "^5.6.1"
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0",
+    "pino": "^8.17.2",
+    "pino-http": "^8.6.1",
+    "zod": "^4.1.12"
   }
 }
