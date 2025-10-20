@@ -1,27 +1,19 @@
 import bcrypt from "bcryptjs";
 import type { RequestHandler } from "express";
-import { z } from "zod";
 
 import { env } from "@/env";
 
 import { AppError } from "../errors/AppError";
-
-export const emailSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .toLowerCase()
-    .min(1, "Email is required")
-    .max(100, "Email must be at most 100 characters")
-    .pipe(z.email("Invalid email format")),
-});
+import { emailSchema, passwordSchema } from "../schema/zod";
 
 export const validateEmail: RequestHandler = (req, res, next) => {
   const { email } = req.body;
   const parsedEmail = emailSchema.safeParse({ email });
 
   if (!parsedEmail.success) {
-    throw new AppError(400, "VALIDATION_ERROR", "Validation failed");
+    const errorMessage = parsedEmail.error.issues.map(({ message }) => message).join(", ");
+
+    throw new AppError(400, "VALIDATION_ERROR", errorMessage);
   }
 
   res.locals.validatedEmail = parsedEmail.data.email;
@@ -29,9 +21,26 @@ export const validateEmail: RequestHandler = (req, res, next) => {
   next();
 };
 
-export const passwordHash: RequestHandler = async (req, res, next) => {
-  res.locals.passwordHash = await bcrypt.hash(req.body.password, env.BCRYPT_ROUNDS);
+export const validatePassword: RequestHandler = (req, res, next) => {
+  const { password } = req.body;
+  const parsedPassword = passwordSchema.safeParse({ password });
 
+  if (!parsedPassword.success) {
+    const errorMessage = parsedPassword.error.issues
+      .map((issue: { message: string }) => issue.message)
+      .join(", ");
+
+    throw new AppError(400, "VALIDATION_ERROR", errorMessage);
+  }
+
+  res.locals.validatedPassword = parsedPassword.data.password;
+  next();
+};
+
+export const hashPassword: RequestHandler = async (_req, res, next) => {
+  const password = res.locals.validatedPassword;
+
+  res.locals.passwordHash = await bcrypt.hash(password, env.BCRYPT_ROUNDS);
   console.log("Password Hash:", res.locals.passwordHash);
   next();
 };
