@@ -3,7 +3,7 @@ import express from "express";
 import { pinoHttp } from "pino-http";
 import { notFoundHandler } from "./handlers/notFoundHandler";
 import { logger } from "./lib/logger";
-import { errorHandler } from "./middleware/error";
+import { errorHandler } from "./handlers/errorHandler";
 import routes from "./routes/index";
 
 const app: Express = express();
