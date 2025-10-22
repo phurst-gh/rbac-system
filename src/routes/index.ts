@@ -1,11 +1,7 @@
 import type express from "express";
 import { Router } from "express";
-import {
-  createUser,
-  hashPassword,
-  validateEmail,
-  validatePassword,
-} from "../controllers/userController";
+import { requireAuth } from "src/middleware/requireAuth";
+import { createUser, hashPassword, validateEmail, validatePassword } from "../controllers/auth";
 import { asyncHandler } from "../handlers/asyncHandler";
 
 const router: express.Router = Router();
