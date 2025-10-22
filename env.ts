@@ -41,10 +41,33 @@ const envSchema = z.object({
   DATABASE_URL: z.string().startsWith("postgresql://"),
   POSTGRES_PASSWORD: z.string().nonempty("POSTGRES_PASSWORD is required"),
 
-  JWT_SECRET: z.string().min(32, "Must be 32 characters long"),
-  JWT_EXPIRES_IN: z.string().default("7d"),
+  JWT_ACCESS_SECRET: z.string().min(32, "Must be 32 characters long"),
+  JWT_REFRESH_SECRET: z.string().min(32, "Must be 32 characters long"),
+
+  // /^\d+[mhd]$/ = number followed by m/h/d ("15m", "1h", "7d")
+  JWT_ACCESS_EXPIRES_IN: z
+    .string()
+    .regex(/^\d+[mh]$/, "Must be a valid time format like '15m', '1h'")
+    .default("15m"),
+  JWT_REFRESH_EXPIRES_IN: z
+    .string()
+    .regex(/^\d+[hd]$/, "Must be a valid time format like '1h', '7d'")
+    .default("7d"),
 
   BCRYPT_ROUNDS: z.coerce.number().min(10).max(20).default(12),
+
+  // JWT tokens cookies
+  COOKIE_DOMAIN: z
+    .string()
+    .optional()
+    .transform(val => val && val.length > 0 ? val : undefined),
+  COOKIE_HTTP_ONLY: z
+    .string()
+    .default("true")
+    .transform(val => val === "true"), // Security: prevent XSS access to cookies
+  COOKIE_SAME_SITE: z
+    .enum(["strict", "lax", "none"])
+    .default("lax"), // CSRF protection
 });
 
 export type Env = z.infer<typeof envSchema>;
