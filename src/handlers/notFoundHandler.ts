@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { logger } from "../lib/logger";
+import { logger } from "../lib/pino-logger";
 
 export const notFoundHandler: RequestHandler = (req, res, _next) => {
   logger.warn(
@@ -9,7 +9,7 @@ export const notFoundHandler: RequestHandler = (req, res, _next) => {
       userAgent: req.get("User-Agent"),
       ip: req.ip,
     },
-    "Route not found"
+    "Route not found",
   );
 
   res.status(404).json({

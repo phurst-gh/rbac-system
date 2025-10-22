@@ -1,9 +1,9 @@
 import type { ErrorRequestHandler } from "express";
 import { isDev } from "@/env";
 import { AppError } from "../errors/AppError";
-import { logger } from "../lib/logger";
+import { logger } from "../lib/pino-logger";
 
-export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+export const errorWrapper: ErrorRequestHandler = (err, _req, res, _next) => {
   const isAppError = err instanceof AppError;
 
   const status = isAppError ? err.status : 500;
@@ -28,7 +28,6 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
     error: {
       code,
       message,
-      // Only include stack trace in dev
       ...(isDev() && { stack: err.stack }),
     },
   });

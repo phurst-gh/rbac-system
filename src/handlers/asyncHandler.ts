@@ -11,18 +11,13 @@ import type { RequestHandler } from "express";
  * 2. Forward errors to Express error middleware via next(error)
  * 3. Eliminate the need for try/catch blocks in every async route
  *
- * Usage:
- *   app.get('/users', asyncHandler(async (req, res) => {
- *     const users = await prisma.user.findMany(); // If this throws, it's caught
- *     res.json(users);
- *   }));
- *
  * How it works:
  * - Takes an async RequestHandler function as input
  * - Returns a new RequestHandler that wraps the original
  * - Promise.resolve() ensures we're working with a promise (even if fn isn't async)
  * - .catch(next) forwards any errors to Express error middleware
  */
+
 export const asyncHandler = (fn: RequestHandler): RequestHandler => {
   return (req, res, next) => {
     Promise.resolve(fn(req, res, next)).catch(next);
