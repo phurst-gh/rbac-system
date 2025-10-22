@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import { AppError } from "../../errors/AppError";
 import { emailSchema } from "../../lib/zod";
+import { AppError } from "../../shared/errors/AppError";
 
 export const validateEmail: RequestHandler = (req, res, next) => {
   const { email } = req.body;

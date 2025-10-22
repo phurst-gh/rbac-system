@@ -1,8 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import type { RequestHandler } from "express";
-import { setRefreshCookie } from "src/utils/cookies";
-import { AppError } from "../../errors/AppError";
-import { signAccessToken, signRefreshToken } from "../../lib/jwt";
+import { AppError } from "../../shared/errors/AppError";
+import { setRefreshCookie } from "../lib/cookies";
+import { signAccessToken, signRefreshToken } from "../lib/jwt";
 
 const prisma = new PrismaClient();
 

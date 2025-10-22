@@ -1,6 +1,6 @@
 import type { RequestHandler } from "express";
-import { AppError } from "../../errors/AppError";
 import { passwordSchema } from "../../lib/zod";
+import { AppError } from "../../shared/errors/AppError";
 
 export const validatePassword: RequestHandler = (req, res, next) => {
   const { password } = req.body;

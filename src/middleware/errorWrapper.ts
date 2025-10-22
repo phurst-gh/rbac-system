@@ -1,7 +1,7 @@
 import type { ErrorRequestHandler } from "express";
 import { isDev } from "@/env";
-import { AppError } from "../errors/AppError";
-import { logger } from "../lib/pino-logger";
+import { AppError } from "../shared/errors/AppError";
+import { logger } from "../shared/lib/pino-logger";
 
 export const errorWrapper: ErrorRequestHandler = (err, _req, res, _next) => {
   const isAppError = err instanceof AppError;

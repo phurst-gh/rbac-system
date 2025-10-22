@@ -1,8 +1,10 @@
 import type { RequestHandler } from "express";
-import { AppError } from "src/errors/AppError";
-import { verifyAccessToken } from "src/lib/jwt";
+import { verifyAccessToken } from "../auth";
+import { AppError } from "../shared/errors/AppError";
 
 export const requireAuth: RequestHandler = (req, _res, next) => {
+  console.log("============== requireAuth middleware invoked ==============");
+  console.log("============== requireAuth middleware invoked ==============");
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
