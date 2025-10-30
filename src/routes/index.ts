@@ -2,8 +2,9 @@ import type express from "express";
 import { Router } from "express";
 import { authRouter } from "../auth";
 import { requireAuth } from "../middleware/requireAuth";
-import { rbacRouter } from "../rbac";
-import { userRouter } from "../users";
+
+// import { rbacRouter } from "../rbac";
+// import { userRouter } from "../users";
 
 /**
  * Main Routes Module
@@ -28,8 +29,8 @@ router.get("/health", (_req, res) => {
 });
 
 router.use("/auth", authRouter);
-router.use("/users", userRouter);
-router.use("/rbac", rbacRouter);
+// router.use("/users", userRouter);
+// router.use("/rbac", rbacRouter);
 
 // Test route
 router.get("/ping", (_req, res) => {
