@@ -27,6 +27,7 @@
 | List all images | `docker images` |
 | Remove an image | `docker rmi <image-id>` |
 | Remove all stopped containers & unused resources | `docker system prune` |
+| Remove specific container | `docker rm -f CONTAINER_ID` |
 
 ---
 

@@ -17,7 +17,7 @@ This API will help build tha tinfrastructure.
 
 ---
 
-## Running the App
+## Running
 
 Run each command at the root.
 
@@ -28,3 +28,10 @@ Run each command at the root.
 - App
   - `pnpm install`  
   - `pnpm run dev`
+
+## Closing
+
+- Database
+  - `colima stop`
+  - `docker-compose stop` - Stops containers but does not remove them
+  - `docker-compose down` - Stops and removes containers, networks, and optionally --volumes
