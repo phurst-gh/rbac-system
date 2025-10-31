@@ -1,14 +1,10 @@
 import { PrismaClient } from "@prisma/client";
-import type { RequestHandler } from "express";
 import { AppError } from "../../shared/errors/AppError";
-import { setRefreshCookie } from "../lib/cookies";
 import { signAccessToken, signRefreshToken } from "../lib/jwt";
 
 const prisma = new PrismaClient();
 
-export const createUser: RequestHandler = async (_req, res) => {
-  const { validatedEmail, validatedPassword } = res.locals;
-
+export const createUser = async (validatedEmail: string, hashedPassword: string) => {
   const emailExists = await prisma.user.findUnique({ where: { email: validatedEmail } });
   if (emailExists) {
     throw new AppError(409, "EMAIL_EXISTS", "A user with this email already exists");
@@ -22,7 +18,7 @@ export const createUser: RequestHandler = async (_req, res) => {
   const newUser = await prisma.user.create({
     data: {
       email: validatedEmail,
-      passwordHash: validatedPassword,
+      passwordHash: hashedPassword,
       roleId: userRole.id,
     },
     select: { id: true, email: true, createdAt: true },
@@ -30,11 +26,16 @@ export const createUser: RequestHandler = async (_req, res) => {
 
   const accessToken = signAccessToken({ sub: newUser.id, email: newUser.email });
   const refreshToken = signRefreshToken({ sub: newUser.id });
-  setRefreshCookie(res, refreshToken);
 
-  res.status(201).json({
+  return {
     message: "User created successfully",
-    user: newUser,
-    accessToken: accessToken,
-  });
+    user: {
+      id: String(newUser.id),
+      email: newUser.email,
+      createdAt: newUser.createdAt,
+      role: userRole.name,
+    },
+    accessToken,
+    refreshToken,
+  };
 };

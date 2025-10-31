@@ -9,27 +9,17 @@ import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../lib/jw
  * This endpoint allows clients to obtain a new access token using their refresh token.
  * It implements token rotation for enhanced security - each refresh operation
  * generates a new refresh token and invalidates the old one.
- *
- * Security features:
- * - Validates existing refresh token from HTTP-only cookie
- * - Rotates refresh token on each use (prevents replay attacks)
- * - Issues new short-lived access token
- * - Maintains user session without requiring re-authentication
  */
 export const refresh: RequestHandler = (req, res, next) => {
   try {
-    // Extract refresh token from HTTP-only cookie
-    // This is more secure than storing in localStorage or regular cookies
     const token = req.cookies?.refresh_token;
 
-    // Check if refresh token exists
     if (!token) {
       throw new AppError(401, "NO_REFRESH", "Missing refresh token");
     }
 
-    // Verify the refresh token is valid and not expired
-    // This will throw an error if token is invalid, expired, or tampered with
-    const payload = verifyRefreshToken(token); // throws if invalid/expired
+    // Throws an error if token is invalid, expired, or tampered with
+    const payload = verifyRefreshToken(token);
 
     // SECURITY: Token Rotation
     // Generate a new refresh token to replace the current one

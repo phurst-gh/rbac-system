@@ -1,9 +1,7 @@
-import type { RequestHandler } from "express";
 import { passwordSchema } from "../../lib/zod";
 import { AppError } from "../../shared/errors/AppError";
 
-export const validatePassword: RequestHandler = (req, res, next) => {
-  const { password } = req.body;
+export const validatePassword = (password: string) => {
   const parsedPassword = passwordSchema.safeParse({ password });
 
   if (!parsedPassword.success) {
@@ -14,6 +12,5 @@ export const validatePassword: RequestHandler = (req, res, next) => {
     throw new AppError(400, "VALIDATION_ERROR", errorMessage);
   }
 
-  res.locals.validatedPassword = parsedPassword.data.password;
-  next();
+  return parsedPassword.data.password;
 };

@@ -1,8 +1,12 @@
+// This file contains pure logic, no Express.
 import { AppError } from "../../shared/errors/AppError";
 import type { UserPayload } from "../../shared/types/express";
+import { createUser, hashPassword, validateEmail, validatePassword } from "../controllers";
+import { setRefreshCookie } from "../lib/cookies";
 import { signAccessToken, verifyRefreshToken } from "../lib/jwt";
 
 export interface AuthResult {
+  message: string;
   accessToken: string;
   refreshToken: string;
   user: UserPayload;
@@ -48,15 +52,12 @@ export class AuthServiceImpl implements AuthService {
   }
 
   async register(userData: RegisterData): Promise<AuthResult> {
-    // TODO: Implement actual registration logic
-    // 1. Validate input data
-    // 2. Check if user exists
-    // 3. Hash password
-    // 4. Create user in database
-    // 5. Generate tokens
-    // 6. Return result
+    const validatedEmail = validateEmail(userData.email);
+    const validatedPassword = validatePassword(userData.password);
+    const hashedPassword = await hashPassword(validatedPassword);
+    const user = await createUser(validatedEmail, hashedPassword);
 
-    throw new AppError(501, "NOT_IMPLEMENTED", "Register not implemented yet");
+    return user;
   }
 
   async refresh(refreshToken: string): Promise<RefreshResult> {
