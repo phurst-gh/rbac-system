@@ -2,7 +2,7 @@
 import { AppError } from "../../../shared/errors/AppError";
 import type { UserPayload } from "../../../shared/types/express";
 import { ROLE_NAMES } from "../constants";
-import { hashPassword, setRefreshCookie } from "../lib";
+import { hashPassword } from "../lib";
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../lib/jwt";
 import { roleRepository } from "../repositories/roleRepository";
 import { userRepository } from "../repositories/userRepository";
