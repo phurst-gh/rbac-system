@@ -1,7 +1,7 @@
 import type { JwtPayload } from "jsonwebtoken";
 
 export interface UserPayload extends JwtPayload {
-  userId: string;
+  id: string;
   email: string;
   role: string;
   isActive?: boolean;
