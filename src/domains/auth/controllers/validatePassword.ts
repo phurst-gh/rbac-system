@@ -1,5 +1,5 @@
-import { passwordSchema } from "../../lib/zod";
-import { AppError } from "../../shared/errors/AppError";
+import { passwordSchema } from "../../../lib/zod";
+import { AppError } from "../../../shared/errors/AppError";
 
 export const validatePassword = (password: string) => {
   const parsedPassword = passwordSchema.safeParse({ password });

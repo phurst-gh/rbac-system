@@ -1,5 +1,5 @@
 import { type Router as ExpressRouter, Router } from "express";
-import { asyncHandler } from "../shared/handlers/asyncHandler";
+import { asyncHandler } from "../../shared/handlers/asyncHandler";
 import { register } from "./controllers/authController";
 import { refresh } from "./controllers/refreshToken";
 
@@ -18,15 +18,9 @@ authRouter.post(
 authRouter.post("/refresh", asyncHandler(refresh));
 
 // TODO: Implement logout controller
-authRouter.post(
-  "/logout",
-  // asyncHandler(logoutController)
-);
+// authRouter.post("/logout", logoutController);
 
 // TODO: Implement verify controller (for internal service use)
-authRouter.get(
-  "/verify",
-  // asyncHandler(verifyController)
-);
+// authRouter.get("/verify", verifyController);
 
 export { authRouter };

@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { AppError } from "../../shared/errors/AppError";
+import { AppError } from "../../../shared/errors/AppError";
 import { setRefreshCookie } from "../lib/cookies";
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../lib/jwt";
 

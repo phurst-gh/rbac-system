@@ -1,6 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import { AppError } from "../../shared/errors/AppError";
+import { AppError } from "../../../shared/errors/AppError";
+import { ROLE_NAMES } from "../constants";
 import { signAccessToken, signRefreshToken } from "../lib/jwt";
+import { roleRepository } from "../repositories/roleRepository";
 
 const prisma = new PrismaClient();
 
@@ -10,10 +12,7 @@ export const createUser = async (validatedEmail: string, hashedPassword: string)
     throw new AppError(409, "EMAIL_EXISTS", "A user with this email already exists");
   }
 
-  const userRole = await prisma.role.findUnique({ where: { name: "user" } });
-  if (!userRole) {
-    throw new AppError(500, "ROLE_NOT_FOUND", "Default 'user' role not found");
-  }
+  const userRole = await roleRepository.getUserRole(ROLE_NAMES.USER);
 
   const newUser = await prisma.user.create({
     data: {

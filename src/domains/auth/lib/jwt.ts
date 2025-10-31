@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 import { env } from "@/env";
-import type { UserPayload } from "../../shared/types/express";
+import type { UserPayload } from "../../../shared/types/express";
 
 // Type used as a TS/JWT compatibility workaround
 // Caused by having typed env vars in env.ts

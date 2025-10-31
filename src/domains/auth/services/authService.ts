@@ -1,6 +1,6 @@
 // This file contains pure logic, no Express.
-import { AppError } from "../../shared/errors/AppError";
-import type { UserPayload } from "../../shared/types/express";
+import { AppError } from "../../../shared/errors/AppError";
+import type { UserPayload } from "../../../shared/types/express";
 import { createUser, hashPassword, validateEmail, validatePassword } from "../controllers";
 import { setRefreshCookie } from "../lib/cookies";
 import { signAccessToken, verifyRefreshToken } from "../lib/jwt";

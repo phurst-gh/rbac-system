@@ -1,5 +1,5 @@
 import type { RequestHandler } from "express";
-import { verifyAccessToken } from "../auth";
+import { verifyAccessToken } from "../domains/auth";
 import { AppError } from "../shared/errors/AppError";
 
 export const requireAuth: RequestHandler = (req, _res, next) => {

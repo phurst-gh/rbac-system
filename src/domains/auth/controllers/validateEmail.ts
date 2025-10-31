@@ -1,5 +1,5 @@
-import { emailSchema } from "../../lib/zod";
-import { AppError } from "../../shared/errors/AppError";
+import { emailSchema } from "../../../lib/zod";
+import { AppError } from "../../../shared/errors/AppError";
 
 export const validateEmail = (email: string) => {
   const validatedEmail = emailSchema.safeParse({ email });
