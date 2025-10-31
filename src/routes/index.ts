@@ -1,6 +1,6 @@
 import type express from "express";
 import { Router } from "express";
-import { authRouter } from "../auth";
+import { authRouter } from "../domains/auth";
 import { requireAuth } from "../middleware/requireAuth";
 
 // import { rbacRouter } from "../rbac";
@@ -19,6 +19,10 @@ import { requireAuth } from "../middleware/requireAuth";
  */
 
 const router: express.Router = Router();
+
+router.get("/", (_req, res) => {
+  res.json({ message: "Welcome to the RBAC System API" });
+});
 
 router.get("/health", (_req, res) => {
   res.json({
