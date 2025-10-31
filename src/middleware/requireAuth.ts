@@ -3,8 +3,6 @@ import { verifyAccessToken } from "../auth";
 import { AppError } from "../shared/errors/AppError";
 
 export const requireAuth: RequestHandler = (req, _res, next) => {
-  console.log("============== requireAuth middleware invoked ==============");
-  console.log("============== requireAuth middleware invoked ==============");
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -33,6 +31,6 @@ export const requireAuth: RequestHandler = (req, _res, next) => {
     }
 
     // Fallback
-    throw new AppError(401, "UNAUTHORIZED", "Authentication failed");
+    throw new AppError(401, "UNAUTHORISED", "Authentication failed");
   }
 };
