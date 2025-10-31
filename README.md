@@ -17,6 +17,13 @@ This API will help build tha tinfrastructure.
 
 ---
 
+## Layering
+- **controllers:** translate HTTP -> service calls, no business logic.
+- **services:** orchestrate validation, repositories, token issuance.
+- **repositories:** Prisma data access only.
+- **lib/helpers:** pure functions (hashing, JWT utils).
+- **constants/types:** role names, unions, permissions.
+
 ## Running
 
 Run each command at the root.
