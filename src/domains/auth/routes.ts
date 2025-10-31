@@ -5,7 +5,7 @@ import { refresh } from "./controllers/refreshToken";
 
 const authRouter: ExpressRouter = Router();
 
-authRouter.post("/register", register);
+authRouter.post("/register", asyncHandler(register));
 
 // TODO: Implement login controller
 authRouter.post(

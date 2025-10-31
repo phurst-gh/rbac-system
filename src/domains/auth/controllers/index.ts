@@ -1,4 +1,2 @@
+export * from "../lib/hashPassword";
 export * from "./createUser";
-export * from "./hashPassword";
-export * from "./validateEmail";
-export * from "./validatePassword";

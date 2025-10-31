@@ -1,9 +1,12 @@
 // This file contains pure logic, no Express.
 import { AppError } from "../../../shared/errors/AppError";
 import type { UserPayload } from "../../../shared/types/express";
-import { createUser, hashPassword, validateEmail, validatePassword } from "../controllers";
-import { setRefreshCookie } from "../lib/cookies";
-import { signAccessToken, verifyRefreshToken } from "../lib/jwt";
+import { ROLE_NAMES } from "../constants";
+import { hashPassword, setRefreshCookie } from "../lib";
+import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../lib/jwt";
+import { roleRepository } from "../repositories/roleRepository";
+import { userRepository } from "../repositories/userRepository";
+import { validateEmail, validatePassword } from "../validators";
 
 export interface AuthResult {
   message: string;
@@ -55,9 +58,31 @@ export class AuthServiceImpl implements AuthService {
     const validatedEmail = validateEmail(userData.email);
     const validatedPassword = validatePassword(userData.password);
     const hashedPassword = await hashPassword(validatedPassword);
-    const user = await createUser(validatedEmail, hashedPassword);
 
-    return user;
+    const emailExists = await userRepository.findByEmail(validatedEmail);
+    if (emailExists) {
+      throw new AppError(409, "EMAIL_EXISTS", "A user with this email already exists");
+    }
+    const userRole = await roleRepository.getUserRole(ROLE_NAMES.USER);
+    if (!userRole) {
+      throw new AppError(500, "ROLE_NOT_FOUND", `Role not found: ${ROLE_NAMES.USER}`);
+    }
+
+    const user = await userRepository.create(validatedEmail, hashedPassword, userRole.id);
+    const accessToken = signAccessToken({ sub: user.id, email: user.email });
+    const refreshToken = signRefreshToken({ sub: user.id });
+
+    return {
+      message: "User created successfully",
+      user: {
+        id: String(user.id),
+        email: user.email,
+        createdAt: user.createdAt,
+        role: userRole.name,
+      },
+      accessToken,
+      refreshToken,
+    };
   }
 
   async refresh(refreshToken: string): Promise<RefreshResult> {
