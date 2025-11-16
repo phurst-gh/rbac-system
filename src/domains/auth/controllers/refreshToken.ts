@@ -1,5 +1,6 @@
 import type { RequestHandler } from "express";
 import { AppError } from "../../../shared/errors/AppError";
+import { ErrorCode } from "../../../shared/errors/ErrorCode";
 import { setRefreshCookie } from "../lib/cookies";
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../lib/jwt";
 
@@ -15,7 +16,7 @@ export const refresh: RequestHandler = (req, res, next) => {
     const token = req.cookies?.refresh_token;
 
     if (!token) {
-      throw new AppError(401, "NO_REFRESH", "Missing refresh token");
+      throw new AppError(401, ErrorCode.NO_REFRESH, "Missing refresh token");
     }
 
     // Throws an error if token is invalid, expired, or tampered with

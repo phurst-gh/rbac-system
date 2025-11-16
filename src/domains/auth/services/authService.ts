@@ -1,5 +1,6 @@
 // This file contains pure logic, no Express.
 import { AppError } from "../../../shared/errors/AppError";
+import { ErrorCode } from "../../../shared/errors/ErrorCode";
 import type { UserPayload } from "../../../shared/types/express";
 import { ROLE_NAMES } from "../constants";
 import { hashPassword } from "../lib";
@@ -51,7 +52,7 @@ export class AuthServiceImpl implements AuthService {
     // 4. Generate tokens
     // 5. Return result
 
-    throw new AppError(501, "NOT_IMPLEMENTED", "Login not implemented yet");
+    throw new AppError(501, ErrorCode.NOT_IMPLEMENTED, "Login not implemented yet");
   }
 
   async register(userData: RegisterData): Promise<AuthResult> {
@@ -61,11 +62,11 @@ export class AuthServiceImpl implements AuthService {
 
     const emailExists = await userRepository.findByEmail(validatedEmail);
     if (emailExists) {
-      throw new AppError(409, "EMAIL_EXISTS", "A user with this email already exists");
+      throw new AppError(409, ErrorCode.EMAIL_EXISTS, "A user with this email already exists");
     }
     const userRole = await roleRepository.getUserRole(ROLE_NAMES.USER);
     if (!userRole) {
-      throw new AppError(500, "ROLE_NOT_FOUND", `Role not found: ${ROLE_NAMES.USER}`);
+      throw new AppError(500, ErrorCode.ROLE_NOT_FOUND, `Role not found: ${ROLE_NAMES.USER}`);
     }
 
     const user = await userRepository.create(validatedEmail, hashedPassword, userRole.id);
@@ -95,7 +96,7 @@ export class AuthServiceImpl implements AuthService {
 
       return { accessToken };
     } catch (error) {
-      throw new AppError(401, "INVALID_REFRESH_TOKEN", "Refresh token is invalid or expired");
+      throw new AppError(401, ErrorCode.INVALID_REFRESH_TOKEN, "Refresh token is invalid or expired");
     }
   }
 
@@ -112,7 +113,7 @@ export class AuthServiceImpl implements AuthService {
   async verifyToken(accessToken: string): Promise<UserPayload> {
     // This is implemented in the existing JWT utilities
     // Could be moved here for consistency
-    throw new AppError(501, "NOT_IMPLEMENTED", "Verify token not implemented yet");
+    throw new AppError(501, ErrorCode.NOT_IMPLEMENTED, "Verify token not implemented yet");
   }
 }
 
