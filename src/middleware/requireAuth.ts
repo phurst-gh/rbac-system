@@ -13,8 +13,8 @@ export const requireAuth: RequestHandler = (req, _res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    const payload = verifyAccessToken(token);
-    req.user = payload;
+    const payload = verifyAccessToken(token);  // Returns JWTPayload
+    req.user = payload;  // JWTPayload with 'sub'
     next();
   } catch (error) {
     const err = error as Error;

@@ -1,24 +1,16 @@
 import { type Router as ExpressRouter, Router } from "express";
 import { asyncHandler } from "../../shared/handlers/asyncHandler";
-import { register } from "./controllers/authController";
-import { refresh } from "./controllers/refreshToken";
+import { login, logout, refreshToken, register } from "./controllers/authController";
 
 const authRouter: ExpressRouter = Router();
 
 authRouter.post("/register", asyncHandler(register));
 
-// TODO: Implement login controller
-authRouter.post(
-  "/login",
-  // asyncHandler(validateEmail),
-  // asyncHandler(validatePassword),
-  // asyncHandler(loginController)
-);
+authRouter.post("/login", asyncHandler(login));
 
-authRouter.post("/refresh", asyncHandler(refresh));
+authRouter.post("/logout", asyncHandler(logout));
 
-// TODO: Implement logout controller
-// authRouter.post("/logout", logoutController);
+authRouter.post("/refresh-token", asyncHandler(refreshToken));
 
 // TODO: Implement verify controller (for internal service use)
 // authRouter.get("/verify", verifyController);

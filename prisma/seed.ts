@@ -47,12 +47,18 @@ async function main() {
       throw new Error(`Role '${user.role}' not found`);
     }
 
-    await prisma.user.upsert({
-      where: { email: user.email },
-      update: {},
-      create: { email, passwordHash: passHash, roleId },
-    });
-    console.log(`✅ User seeded: ${user.email} (${user.role})`);
+    try {
+      await prisma.user.create({
+        data: {
+          email,
+          passwordHash: passHash,
+          roleId,
+        },
+      });
+      console.log(`✅ User seeded: ${user.email} (${user.role})`);
+    } catch (error) {
+      console.log(`⚠️  User already exists: ${user.email}`);
+    }
   }
 }
 

@@ -25,7 +25,10 @@
     "allowImportingTsExtensions": false,
     "baseUrl": "./",
     "paths": {
-      "@/env": ["env.ts"]
+      "@/env": ["env.ts"],
+      "@/shared/*": ["src/shared/*"],
+      "@/domains/*": ["src/domains/*"],
+      "@/lib/*": ["src/lib/*"]
     }
   },
   "include": [

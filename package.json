@@ -1,5 +1,5 @@
 {
-  "name": "rbac-auth-api-gateway",
+  "name": "rbac-auth-system",
   "version": "1.0.0",
   "description": "Showcases a production secrure RBAC system",
   "main": "start.ts",

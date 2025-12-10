@@ -10,7 +10,7 @@ import { logger } from "./shared/lib/pino-logger";
 const app: Express = express();
 
 // Middleware
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json({ limit: "10mb" })); // Parse JSON bodies with a size limit
 app.use(cookieParser()); // Parse cookies from requests
 
 // HTTP request logging

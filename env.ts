@@ -22,12 +22,11 @@ import { z } from "zod";
 
 process.env.APP_STAGE = process.env.APP_STAGE || "dev";
 
-const isProduction = process.env.APP_STAGE === "prod";
 const isDevelopment = process.env.APP_STAGE === "dev";
 const isTesting = process.env.APP_STAGE === "test";
 
 if (isDevelopment) {
-  loadEnv();
+  loadEnv(); // Loads .env by default
 } else if (isTesting) {
   loadEnv({ path: ".env.test" });
 }
@@ -99,4 +98,3 @@ export const isDev = () => env.APP_STAGE === "dev";
 export const isTest = () => env.APP_STAGE === "test";
 
 export { env };
-export default env;
