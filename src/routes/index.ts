@@ -45,4 +45,4 @@ router.get("/auth-test", requireAuth, (req, res) => {
   res.json({ ok: true, user: req.user });
 });
 
-export default router;
+export { router };

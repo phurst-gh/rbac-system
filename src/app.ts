@@ -3,7 +3,7 @@ import type { Express } from "express";
 import express from "express";
 import { pinoHttp } from "pino-http";
 import { errorWrapper } from "./middleware/errorWrapper";
-import routes from "./routes/index";
+import { router } from "./routes/index";
 import { notFoundHandler } from "./shared/handlers/notFoundHandler";
 import { logger } from "./shared/lib/pino-logger";
 
@@ -17,7 +17,7 @@ app.use(cookieParser()); // Parse cookies from requests
 app.use(pinoHttp({ logger }));
 
 // Call routes
-app.use(routes);
+app.use(router);
 
 // Handle 404 and errors
 app.use(notFoundHandler);
