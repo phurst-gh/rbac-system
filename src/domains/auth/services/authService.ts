@@ -1,11 +1,11 @@
 // This file contains pure logic, no Express.
+
+import { Role } from "@prisma/client";
 import { AppError } from "@/shared/errors/AppError";
 import { ErrorCode } from "@/shared/errors/ErrorCode";
 import { logger } from "@/shared/lib/pino-logger";
 import type { ApiUser } from "@/shared/types/express";
-import { ROLE_NAMES } from "../constants";
 import { hashPassword, verifyPassword, verifyRefreshToken } from "../lib";
-import { roleRepository } from "../repositories/roleRepository";
 import { userRepository } from "../repositories/userRepository";
 import { generateJWTs } from "../utils/generateJWTs";
 import { validateEmail, validatePassword } from "../validators";
@@ -80,7 +80,7 @@ const login = async (UserCredentials: UserCredentials): Promise<AuthResult> => {
   const { refreshToken: newRefreshToken, accessToken } = generateJWTs(
     user.id,
     user.email,
-    user.role.name,
+    user.role,
   );
   // 5. Return result
   logger.info(
@@ -88,7 +88,7 @@ const login = async (UserCredentials: UserCredentials): Promise<AuthResult> => {
       operation: "login",
       userId: user.id,
       email: user.email,
-      role: user.role.name,
+      role: user.role,
     },
     "User logged in successfully",
   );
@@ -101,7 +101,7 @@ const login = async (UserCredentials: UserCredentials): Promise<AuthResult> => {
       id: user.id,
       email: user.email,
       createdAt: user.createdAt,
-      role: user.role.name,
+      role: user.role,
     },
   };
 };
@@ -124,23 +124,18 @@ const register = async (UserCredentials: UserCredentials): Promise<AuthResult> =
     );
     throw new AppError(409, ErrorCode.EMAIL_EXISTS, "A user with this email already exists");
   }
-  // 3. Get role id from roles table for relevant role ('user')
-  const userRole = await roleRepository.getUserRole(ROLE_NAMES.USER);
-  if (!userRole) {
-    throw new AppError(500, ErrorCode.ROLE_NOT_FOUND, `Role not found: ${ROLE_NAMES.USER}`);
-  }
 
-  // 4. Create user in database
-  const user = await userRepository.create(validatedEmail, hashedPassword, userRole.id);
+  // 3. Create user in database (Generating only USER role for now)
+  const user = await userRepository.create(validatedEmail, hashedPassword, Role.USER);
   if (!user) {
     throw new AppError(500, ErrorCode.INTERNAL_SERVER_ERROR, "Failed to create user");
   }
-  
+
   // 5. Generate tokens
   const { refreshToken: newRefreshToken, accessToken } = generateJWTs(
     user.id,
     user.email,
-    user.role.name,
+    user.role,
   );
 
   logger.info(
@@ -148,7 +143,7 @@ const register = async (UserCredentials: UserCredentials): Promise<AuthResult> =
       operation: "register",
       userId: user.id,
       email: user.email,
-      role: userRole.name,
+      role: user.role,
     },
     "User registered successfully",
   );
@@ -161,7 +156,7 @@ const register = async (UserCredentials: UserCredentials): Promise<AuthResult> =
       id: user.id,
       email: user.email,
       createdAt: user.createdAt,
-      role: userRole.name,
+      role: user.role,
     },
   };
 };
@@ -181,7 +176,7 @@ const refreshToken = async (token: string): Promise<RefreshResult> => {
     const { refreshToken: newRefreshToken, accessToken } = generateJWTs(
       user.id,
       user.email,
-      user.role.name,
+      user.role,
     );
 
     logger.info(

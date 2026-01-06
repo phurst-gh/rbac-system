@@ -1,3 +1,5 @@
+// This file cointains Express request handlers (controllers)
+
 import type { Request, Response } from "express";
 import { clearRefreshCookie, setRefreshCookie } from "../lib/cookies";
 import { authService } from "../services/authService";

@@ -1,3 +1,4 @@
+import type { Role } from "@prisma/client";
 import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
@@ -12,7 +13,7 @@ const userRepository = {
         email: true,
         passwordHash: true, // Needed for login password verification
         createdAt: true,
-        role: { select: { name: true } },
+        role: true,
       },
     }),
   findById: async (id: string) =>
@@ -22,17 +23,17 @@ const userRepository = {
         id: true,
         email: true,
         createdAt: true,
-        role: { select: { name: true } },
+        role: true,
       },
     }),
-  create: async (email: string, passwordHash: string, roleId: number) =>
+  create: async (email: string, passwordHash: string, role: Role) =>
     await prisma.user.create({
-      data: { email, passwordHash, roleId },
+      data: { email, passwordHash, role },
       select: {
         id: true,
         email: true,
         createdAt: true,
-        role: { select: { name: true } },
+        role: true,
       },
     }),
 };

@@ -1,68 +1,48 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
-async function main() {
+async function seedDatabase() {
   console.log("🌱 Starting database seed...");
 
-  // Create roles (upsert is idempotent)
-  const roleOptions = ["user", "manager", "admin"];
-  for (const role of roleOptions) {
-    await prisma.role.upsert({
-      where: { name: role },
-      update: {},
-      create: { name: role },
-    });
-  }
-  console.log("✅ Roles seeded:", roleOptions.join(", "));
-
-  const users = [
+  const users: Array<{
+    email: string;
+    password: string;
+    role: Role;
+  }> = [
     {
       email: "user@example.com",
       password: "User123!",
-      role: "user",
-    },
-    {
-      email: "manager@example.com",
-      password: "Manager123!",
-      role: "manager",
+      role: Role.USER,
     },
     {
       email: "admin@example.com",
       password: "Admin123!",
-      role: "admin",
+      role: Role.ADMIN,
     },
   ];
 
-  const roles = await prisma.role.findMany();
-  const roleIdByName = new Map(roles.map((r) => [r.name, r.id]));
-
   for (const user of users) {
-    const { email } = user;
+    const { email, role } = user;
     const passHash = await bcrypt.hash(user.password, 10);
-    const roleId = roleIdByName.get(user.role);
-
-    if (!roleId) {
-      throw new Error(`Role '${user.role}' not found`);
-    }
 
     try {
       await prisma.user.create({
         data: {
           email,
           passwordHash: passHash,
-          roleId,
+          role,
         },
       });
-      console.log(`✅ User seeded: ${user.email} (${user.role})`);
+      console.log(`✅ User seeded: ${user.email} (${role})`);
     } catch (error) {
       console.log(`⚠️  User already exists: ${user.email}`);
     }
   }
 }
 
-main()
+seedDatabase()
   .then(async () => {
     await prisma.$disconnect();
   })
