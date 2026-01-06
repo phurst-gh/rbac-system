@@ -1,6 +1,6 @@
-import { ErrorCode } from "src/shared/errors/ErrorCode";
 import { emailSchema } from "@/lib/zod";
 import { AppError } from "@/shared/errors/AppError";
+import { ErrorCode } from "@/shared/errors/ErrorCode";
 
 export const validateEmail = (email: string) => {
   const validatedEmail = emailSchema.safeParse({ email });
