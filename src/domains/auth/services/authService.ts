@@ -209,7 +209,7 @@ const logout = async (refreshToken: string): Promise<void> => {
   // This is just for potential future features like:
   // - Logging the logout event
   // - Blacklisting the refresh token (if you add that later)
-  // - Cleanup tasks
+  // - Cleanup tasks  
 
   logger.info(
     {
