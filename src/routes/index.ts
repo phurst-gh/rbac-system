@@ -1,6 +1,7 @@
 import type express from "express";
 import { Router } from "express";
 import { authRouter } from "../domains/auth";
+import { workspaceRouter } from "../domains/workspace";
 import { requireAuth } from "../middleware/requireAuth";
 
 // import { rbacRouter } from "../rbac";
@@ -14,6 +15,7 @@ import { requireAuth } from "../middleware/requireAuth";
  *
  * Domain Structure:
  * - /auth/* - Authentication operations (login, register, refresh, etc.)
+ * - /users/* - Workpace control and management (create, delete, join, leave, etc.)
  * - /users/* - User management (profile, preferences, etc.)
  * - /rbac/* - Role-based access control (roles, permissions, assignments)
  */
@@ -33,6 +35,7 @@ router.get("/health", (_req, res) => {
 });
 
 router.use("/auth", authRouter);
+router.use("/workspace", workspaceRouter);
 // router.use("/users", userRouter);
 // router.use("/rbac", rbacRouter);
 
