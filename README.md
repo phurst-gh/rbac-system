@@ -1,9 +1,7 @@
 # Project Architecture Overview
 
 ## 🎯 Project
-A **minimal, modern, service-oriented backend** that demonstrates how independent services can be securely linked and containerized in a real-world environment.
-
-This API will help build tha tinfrastructure.
+...
 
 ---
 
