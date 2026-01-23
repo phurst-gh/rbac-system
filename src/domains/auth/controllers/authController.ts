@@ -56,4 +56,6 @@ const refreshToken = async (req: Request, res: Response) => {
   });
 };
 
+// No interface need for authController.ts, like in authService.ts, because the output is only HTTP side effects..
+// ...whereas the authService functions are consumed by other code so they should.
 export { register, login, logout, refreshToken };

@@ -15,7 +15,7 @@ import { requireAuth } from "../middleware/requireAuth";
  *
  * Domain Structure:
  * - /auth/* - Authentication operations (login, register, refresh, etc.)
- * - /users/* - Workpace control and management (create, delete, join, leave, etc.)
+ * - /workspace/* - Workpace control and management (create, delete, join, leave, etc.)
  * - /users/* - User management (profile, preferences, etc.)
  * - /rbac/* - Role-based access control (roles, permissions, assignments)
  */
@@ -35,7 +35,7 @@ router.get("/health", (_req, res) => {
 });
 
 router.use("/auth", authRouter);
-router.use("/workspace", workspaceRouter);
+router.use("/workspace", requireAuth, workspaceRouter);
 // router.use("/users", userRouter);
 // router.use("/rbac", rbacRouter);
 
@@ -44,7 +44,7 @@ router.get("/ping", (_req, res) => {
   res.json({ message: "pong" });
 });
 // Protected test route
-router.get("/auth-test", requireAuth, (req, res) => {
+router.get("/route-requires-auth-test", requireAuth, (req, res) => {
   res.json({ ok: true, user: req.user });
 });
 

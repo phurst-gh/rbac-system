@@ -1,6 +1,6 @@
 # Project Architecture Overview
 
-## 🎯 Project
+## 🎯 Sanbox: TestTube
 ...
 
 ---
@@ -27,7 +27,7 @@
 Run each command at the root.
 
 - Database
-  - `colima start`
+  - `colima start` or open docker desktop
   - `docker-compose up -d`
 
 - App
@@ -37,6 +37,6 @@ Run each command at the root.
 ## Closing
 
 - Database
-  - `colima stop`
+  - `colima stop` or stop in docker desktop
   - `docker-compose stop` - Stops containers but does not remove them
   - `docker-compose down` - Stops and removes containers, networks, and optionally --volumes

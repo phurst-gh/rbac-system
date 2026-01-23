@@ -10,11 +10,18 @@ import { userRepository } from "../repositories/userRepository";
 import { generateJWTs } from "../utils/generateJWTs";
 import { validateEmail, validatePassword } from "../validators";
 
-export interface AuthResult {
+/**
+ * Auth Service Implementation
+ *
+ * This implementation handles the business logic for authentication.
+ * Controllers call these functions and handle HTTP-specific concerns.
+ */
+
+export type AuthResult = {
   message: string;
   accessToken: string;
   refreshToken: string;
-  user: ApiUser; // API response type (uses 'id')
+  user: ApiUser;
 }
 
 export type RefreshResult = {
@@ -22,11 +29,7 @@ export type RefreshResult = {
   refreshToken: string;
 };
 
-/**
- * Core authentication service operations
- * This interface could become a microservice API contract
- */
-export interface AuthService {
+export type AuthService = {
   login(UserCredentials: UserCredentials): Promise<AuthResult>;
   register(UserCredentials: UserCredentials): Promise<AuthResult>;
   refreshToken(token: string): Promise<RefreshResult>;
@@ -38,12 +41,6 @@ export type UserCredentials = {
   password: string;
 };
 
-/**
- * Auth Service Implementation
- *
- * This implementation handles the business logic for authentication.
- * Controllers call these functions and handle HTTP-specific concerns.
- */
 const login = async (UserCredentials: UserCredentials): Promise<AuthResult> => {
   // 1. Validate input
   const validatedEmail = validateEmail(UserCredentials.email);

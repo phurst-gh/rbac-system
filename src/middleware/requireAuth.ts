@@ -14,7 +14,7 @@ export const requireAuth: RequestHandler = (req, _res, next) => {
 
   try {
     const payload = verifyAccessToken(token);  // Returns JWTPayload
-    req.user = payload;  // JWTPayload with 'sub'
+    req.user = payload;
     next();
   } catch (error) {
     const err = error as Error;

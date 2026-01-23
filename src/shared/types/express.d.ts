@@ -1,15 +1,14 @@
 import type { JwtPayload } from "jsonwebtoken";
 
-// JWT Token Payload (internal - follows RFC 7519)
 export interface JWTPayload extends JwtPayload {
-  sub: string;     // User ID (JWT standard)
+  sub: string;
   email?: string;  // Only in access tokens  
   role?: string;   // Only in access tokens
 }
 
-// API Response User (external - REST standard)
+// API Response User
 export interface ApiUser {
-  id: string;      // REST API standard (clients expect 'id')
+  id: string;
   email: string;
   role: string;
   createdAt: Date;

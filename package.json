@@ -1,7 +1,7 @@
 {
-  "name": "rbac-auth-system",
+  "name": "TestTube",
   "version": "1.0.0",
-  "description": "Showcases a production secrure RBAC system",
+  "description": "TestTube is a sandbox application for testing architecture, design patterns and technologies for Node.js applications. Currently, the idea is to practicing architecture and potentially microservices. Initially, it will allow users to create and join workspaces. Each workspace will have multiple projects where users can collaborate. The focus will be on building a solid backend architecture using TypeScript, Express, and Prisma with a PostgreSQL database. Future plans include integrating real-time collaboration features using WebSockets or similar technologies.",
   "main": "start.ts",
   "type": "module",
   "scripts": {
