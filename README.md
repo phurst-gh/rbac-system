@@ -40,3 +40,8 @@ Run each command at the root.
   - `colima stop` or stop in docker desktop
   - `docker-compose stop` - Stops containers but does not remove them
   - `docker-compose down` - Stops and removes containers, networks, and optionally --volumes
+
+
+## Come back to these
+
+- Handle errors that happen outside the request lifecycle - as they aren't caught with my setup

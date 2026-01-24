@@ -16,6 +16,8 @@ import type { RequestHandler } from "express";
  * - Returns a new RequestHandler that wraps the original
  * - Promise.resolve() ensures we're working with a promise (even if fn isn't async)
  * - .catch(next) forwards any errors to Express error middleware
+ * 
+ * This way, route handlers can focus on business logic without boilerplate error handling.
  */
 
 export const asyncHandler = (fn: RequestHandler): RequestHandler => {
