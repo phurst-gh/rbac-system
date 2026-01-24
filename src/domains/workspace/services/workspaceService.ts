@@ -1,19 +1,44 @@
 import { AppError } from "@/shared/errors/AppError";
 import { ErrorCode } from "@/shared/errors/ErrorCode";
 import { logger } from "@/shared/lib/pino-logger";
+import { workspaceRepository } from "../repositories/workspaceRepository";
+import { validateWorkspaceName } from "../validators";
 
-type WorkspaceService = {
-  create: (name: string) => void;
+type Workspace = {
+  id: string;
+  name: string;
+  isPublic: boolean;
+  message: string;
 }
 
-const create = (name: string) => {
-  // validate/sanitise name input
-  // interact with repository to create workspace record
-  logger.info({ operation: "createWorkspace", name }, `Workspace '${name}' created.`);
+type WorkspaceService = {
+  create(name: string, isPublic: boolean, role: string): Promise<Workspace>;
+}
+
+const create = async (name: string, isPublic: boolean, role: string) => {
+  // 1. Validate input
+  const validatedName = validateWorkspaceName(name);
+
+  // 2. Create in database
+  const workspace = await workspaceRepository.createWorkspace(validatedName, isPublic, role);
+  if (!workspace) {
+    throw new AppError(500, ErrorCode.INTERNAL_SERVER_ERROR, "Failed to create workspace");
+  }
+
+  logger.info({
+      operation: "create_workspace",
+      workspaceId: workspace.id,
+      name: validatedName,
+      isPublic,
+    },
+    `Workspace '${validatedName}' created.`
+  );
+
   return {
-    operation: "createWorkspace",
-    name,
-    message: `Workspace '${name}' created.`
+    id: workspace.id,
+    name: validatedName,
+    isPublic,
+    message: `Workspace '${validatedName}' created.`,
   };
 }
 
