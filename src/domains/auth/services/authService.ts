@@ -17,26 +17,26 @@ import { validateEmail, validatePassword } from "../validators";
  * Controllers call these functions and handle HTTP-specific concerns.
  */
 
-export type AuthResult = {
+type AuthResult = {
   message: string;
   accessToken: string;
   refreshToken: string;
   user: ApiUser;
 }
 
-export type RefreshResult = {
+type RefreshResult = {
   accessToken: string;
   refreshToken: string;
 };
 
-export type AuthService = {
+type AuthService = {
   login(UserCredentials: UserCredentials): Promise<AuthResult>;
   register(UserCredentials: UserCredentials): Promise<AuthResult>;
   refreshToken(token: string): Promise<RefreshResult>;
   logout(refreshToken: string): Promise<void>;
 }
 
-export type UserCredentials = {
+type UserCredentials = {
   email: string;
   password: string;
 };
