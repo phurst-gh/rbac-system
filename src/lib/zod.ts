@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Filter } from "bad-words";
 
 export const emailSchema = z.object({
   email: z
@@ -19,4 +20,14 @@ export const passwordSchema = z.object({
     .regex(/[a-z]/, "Password must contain at least one lowercase letter")
     .regex(/[0-9]/, "Password must contain at least one number")
     .regex(/[^A-Za-z0-9]/, "Password must contain at least one special character"),
+});
+
+const filter = new Filter();
+export const workspaceNameSchema = z.object({
+  name: z
+    .string()
+    .trim()
+    .min(2)
+    .max(50)
+    .refine((value) => !filter.isProfane(value), "Workspace name contains blocked words"),
 });
