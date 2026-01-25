@@ -8,11 +8,12 @@ type Workspace = {
   id: string;
   name: string;
   isPublic: boolean;
-  message: string;
+  message: string; // optional? As not needed in getUserWorkspaces
 }
 
 type WorkspaceService = {
   create(name: string, isPublic: boolean, role: string): Promise<Workspace>;
+  getUserWorkspaces(userId: string): Promise<Workspace[]>;
 }
 
 const create = async (name: string, isPublic: boolean, role: string) => {
@@ -42,6 +43,11 @@ const create = async (name: string, isPublic: boolean, role: string) => {
   };
 }
 
+const getUserWorkspaces = async (userId: string) => {
+  // ... Fetch workspaces from database
+};
+
 export const workspaceService: WorkspaceService = {
   create,
+  getUserWorkspaces,
 };

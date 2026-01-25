@@ -22,7 +22,20 @@ const workspaceRepository = {
         isPublic,
         createdAt: true,
       },
-    })
+    }),
+
+    getUserWorkspaces: async (userId: string) =>
+      await prisma.workspace.findMany({
+        where: {
+          members: {
+            some: {
+              userId,
+            },
+          },
+        },
+      }),
+      
+    // createMember
 };
 
 export { workspaceRepository };
