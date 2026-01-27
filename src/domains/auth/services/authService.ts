@@ -22,7 +22,7 @@ type AuthResult = {
   accessToken: string;
   refreshToken: string;
   user: ApiUser;
-}
+};
 
 type RefreshResult = {
   accessToken: string;
@@ -34,7 +34,7 @@ type AuthService = {
   register(UserCredentials: UserCredentials): Promise<AuthResult>;
   refreshToken(token: string): Promise<RefreshResult>;
   logout(refreshToken: string): Promise<void>;
-}
+};
 
 type UserCredentials = {
   email: string;
@@ -49,27 +49,12 @@ const login = async (UserCredentials: UserCredentials): Promise<AuthResult> => {
   // 2. Query database for user
   const user = await userRepository.findByEmail(validatedEmail);
   if (!user) {
-    logger.warn(
-      {
-        operation: "login",
-        email: validatedEmail,
-      },
-      "Login attempt with non-existent email",
-    );
     throw new AppError(401, ErrorCode.INVALID_CREDENTIALS, "Invalid email or password");
   }
 
   // 3. Verify password
   const isPasswordValid = await verifyPassword(validatedPassword, user.passwordHash);
   if (!isPasswordValid) {
-    logger.warn(
-      {
-        operation: "login",
-        userId: user.id,
-        email: validatedEmail,
-      },
-      "Login attempt with invalid password",
-    );
     throw new AppError(401, ErrorCode.INVALID_CREDENTIALS, "Invalid email or password");
   }
 
@@ -79,17 +64,8 @@ const login = async (UserCredentials: UserCredentials): Promise<AuthResult> => {
     user.email,
     user.role,
   );
-  // 5. Return result
-  logger.info(
-    {
-      operation: "login",
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-    },
-    "User logged in successfully",
-  );
 
+  // 5. Return result
   return {
     message: "Login successfull",
     accessToken,
@@ -112,13 +88,6 @@ const register = async (UserCredentials: UserCredentials): Promise<AuthResult> =
   // 2. Check if email already exists
   const emailExists = await userRepository.findByEmail(validatedEmail);
   if (emailExists) {
-    logger.warn(
-      {
-        operation: "register",
-        email: validatedEmail,
-      },
-      "Registration attempt with existing email",
-    );
     throw new AppError(409, ErrorCode.EMAIL_EXISTS, "A user with this email already exists");
   }
 
@@ -133,16 +102,6 @@ const register = async (UserCredentials: UserCredentials): Promise<AuthResult> =
     user.id,
     user.email,
     user.role,
-  );
-
-  logger.info(
-    {
-      operation: "register",
-      userId: user.id,
-      email: user.email,
-      role: user.role,
-    },
-    "User registered successfully",
   );
 
   return {
@@ -176,27 +135,11 @@ const refreshToken = async (token: string): Promise<RefreshResult> => {
       user.role,
     );
 
-    logger.info(
-      {
-        operation: "refresh",
-        userId: payload.sub,
-      },
-      "Tokens refreshed successfully",
-    );
-
     return {
       accessToken,
       refreshToken: newRefreshToken,
     };
   } catch (error) {
-    logger.error(
-      {
-        operation: "refresh",
-        err: error,
-      },
-      "Refresh token verification failed",
-    );
-
     throw new AppError(401, ErrorCode.INVALID_REFRESH_TOKEN, "Refresh token is invalid or expired");
   }
 };
@@ -205,16 +148,8 @@ const logout = async (refreshToken: string): Promise<void> => {
   // The main work happens in the controller (clearing the cookie)
   // This is just for potential future features like:
   // - Logging the logout event
-  // - Blacklisting the refresh token (if you add that later)
-  // - Cleanup tasks  
-
-  logger.info(
-    {
-      operation: "logout",
-      tokenPrefix: refreshToken.substring(0, 10),
-    },
-    "User logged out",
-  );
+  // - Blacklisting the refresh token (if required later)
+  // - Cleanup tasks
 };
 
 export const authService: AuthService = {

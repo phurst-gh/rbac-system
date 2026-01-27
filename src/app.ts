@@ -14,7 +14,7 @@ app.use(express.json({ limit: "10mb" })); // Parse JSON bodies with a size limit
 app.use(cookieParser()); // Parse cookies from requests
 
 // HTTP request logging
-app.use(pinoHttp({ logger }));
+// app.use(pinoHttp({ logger }));
 
 // Call routes
 app.use(router);

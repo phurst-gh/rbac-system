@@ -16,6 +16,7 @@ const userRepository = {
         role: true,
       },
     }),
+
   findById: async (id: string) =>
     await prisma.user.findUnique({
       where: { id },
@@ -26,6 +27,7 @@ const userRepository = {
         role: true,
       },
     }),
+
   create: async (email: string, passwordHash: string, role: Role) =>
     await prisma.user.create({
       data: { email, passwordHash, role },

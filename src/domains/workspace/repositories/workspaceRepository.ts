@@ -17,25 +17,77 @@ const workspaceRepository = {
         },
       },
       select: {
-        id: true,
         name: true,
         isPublic,
         createdAt: true,
       },
     }),
 
-    getUserWorkspaces: async (userId: string) =>
-      await prisma.workspace.findMany({
-        where: {
-          members: {
-            some: {
-              userId,
-            },
+  createMember: async (workspaceId: string, userId: string, role: WorkspaceRole) =>
+    await prisma.workspaceMember.create({
+      data: {
+        workspaceId, // Is this needed, on the frontend i should have workspace name at this point
+        userId,
+        role,
+      },
+    }),
+
+  findAllByUser: async (userId: string) =>
+    await prisma.workspace.findMany({
+      where: {
+        members: {
+          some: {
+            userId,
           },
         },
-      }),
-      
-    // createMember
+      },
+      select: {
+        id: true,
+        name: true,
+        isPublic: true,
+        createdAt: true,
+      },
+    }),
+
+  findById: async (workspaceId: string) =>
+    await prisma.workspace.findUnique({
+      where: {
+        id: workspaceId,
+      },
+      select: {
+        id: true,
+        name: true,
+        isPublic: true,
+        createdAt: true,
+      },
+    }),
+
+  findByUserAndName: async (userId: string, name: string) =>
+    await prisma.workspace.findMany({
+      where: {
+        name,
+        members: {
+          some: {
+            userId,
+          },
+        },
+      },
+    }),
+
+  findMembershipByUserAndWorkspace: async (userId: string, workspaceId: string) =>
+    await prisma.workspaceMember.findUnique({
+      where: {
+        workspaceId_userId: {
+          workspaceId,
+          userId,
+        },
+      },
+    }),
+
+  // delete workspace
+  // createMember
+  // remove member
+  // update member role
 };
 
 export { workspaceRepository };

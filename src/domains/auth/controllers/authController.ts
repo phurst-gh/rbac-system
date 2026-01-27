@@ -22,6 +22,7 @@ const login = async (req: Request, res: Response) => {
   setRefreshCookie(res, result.refreshToken);
 
   res.status(200).json({
+    message: result.message,
     status: "success",
     data: result.user,
     accessToken: result.accessToken,
