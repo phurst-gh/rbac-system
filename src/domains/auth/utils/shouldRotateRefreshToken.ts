@@ -1,4 +1,4 @@
-import type { JWTPayload } from "@/shared/types/express";
+import type { RefreshTokenPayload } from "@/shared/types/express";
 
 /**
  * Token Rotation Utilities
@@ -16,7 +16,7 @@ import type { JWTPayload } from "@/shared/types/express";
  */
 
 const shouldRotateRefreshToken = (
-  payload: JWTPayload,
+  payload: RefreshTokenPayload,
   rotationThreshold: number = 0.5,
 ): boolean => {
   if (!payload.iat || !payload.exp) return true;

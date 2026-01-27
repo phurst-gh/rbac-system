@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { AppError } from "@/shared/errors/AppError";
 import { ErrorCode } from "@/shared/errors/ErrorCode";
+import { setProfane } from "@/test/mocks/bad-words";
 import { clearRefreshCookie, setRefreshCookie } from "../lib/cookies";
 import { authService } from "../services/authService";
 import { login, logout, refreshToken, register } from "./authController";
@@ -29,6 +30,7 @@ const mockResponse = () => {
 
 const testAuthResult = {
   message: "Success",
+  status: "success",
   accessToken: "access_token",
   refreshToken: "refresh_token",
   user: {
@@ -38,6 +40,9 @@ const testAuthResult = {
     createdAt: new Date(),
   },
 };
+
+// bad-words mock control
+setProfane(true);
 
 describe("authController", () => {
   afterEach(() => jest.clearAllMocks());
@@ -93,6 +98,7 @@ describe("authController", () => {
       expect(res.status).toHaveBeenCalledWith(200);
       expect(res.json).toHaveBeenCalledWith({
         status: "success",
+        message: "Success",
         data: testAuthResult.user,
         accessToken: "access_token",
       });

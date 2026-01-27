@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
+import { z } from "zod";
 import { env } from "@/env";
-import type { JWTPayload } from "@/shared/types/express";
+import type { AccessTokenPayload, RefreshTokenPayload } from "@/shared/types/express";
 
 // Type used as a TS/JWT compatibility workaround
 // Caused by having typed env vars in env.ts
@@ -16,12 +17,28 @@ const signRefreshToken = (payload: object): string => {
   return jwt.sign(payload, env.JWT_REFRESH_SECRET, { expiresIn });
 };
 
-const verifyAccessToken = (token: string): JWTPayload => {
-  return jwt.verify(token, env.JWT_ACCESS_SECRET) as JWTPayload;
+// Zod schemas for payload validation: ensure expected types exist after jwt.verify
+const basePayloadSchema = z.object({
+  sub: z.string(),
+  iat: z.number().optional(),
+  exp: z.number().optional(),
+});
+
+const accessTokenPayloadSchema = basePayloadSchema.extend({
+  email: z.string().email(),
+  role: z.string().optional(),
+});
+
+const refreshTokenPayloadSchema = basePayloadSchema;
+
+const verifyAccessToken = (token: string): AccessTokenPayload => {
+  const payload = jwt.verify(token, env.JWT_ACCESS_SECRET);
+  return accessTokenPayloadSchema.parse(payload);
 };
 
-const verifyRefreshToken = (token: string): JWTPayload => {
-  return jwt.verify(token, env.JWT_REFRESH_SECRET) as JWTPayload;
+const verifyRefreshToken = (token: string): RefreshTokenPayload => {
+  const payload = jwt.verify(token, env.JWT_REFRESH_SECRET);
+  return refreshTokenPayloadSchema.parse(payload);
 };
 
 export { signAccessToken, signRefreshToken, verifyAccessToken, verifyRefreshToken };

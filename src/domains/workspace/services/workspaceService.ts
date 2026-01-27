@@ -12,7 +12,7 @@ type Workspace = {
 
 type WorkspaceService = {
   createWorkspace(name: string, isPublic: boolean, userId: string): Promise<Workspace>;
-  inviteMember(workspaceId: string, targetUserId: string, currentUserId: string): Promise<void>;
+  // inviteMember(workspaceId: string, targetUserId: string, currentUserId: string): Promise<void>;
   getUserWorkspaces(userId: string): Promise<Workspace[]>;
   getWorkspaceMembers(workspaceId: string): Promise<any[]>;
 };
@@ -45,28 +45,28 @@ const createWorkspace = async (name: string, isPublic: boolean, userId: string) 
 };
 
 // I need real invites (in app) so users arent automatically added when another user invites them to a workspace
-const inviteMember = async (workspaceId: string, userId: string, targetUserId: string) => {
-  // const currentUsereMembership = await workspaceRepository.findMembershipByUserAndWorkspace(
-  //   userId,
-  //   workspaceId,
-  // );
-  // const workspace = await workspaceRepository.findById(workspaceId);
-  // if (!workspace) {
-  //   throw new AppError(404, ErrorCode.WORKSPACE_NOT_FOUND, "Workspace not found");
-  // }
-  // const isWorkspacePublic = workspace?.isPublic;
-  // if (currentUsereMembership?.role === "OWNER" || isWorkspacePublic) {
-  //   await workspaceRepository.createMember(workspaceId, targetUserId, "MEMBER");
-  //   return {
-  //     message: `User '${targetUserId}' added to workspace.`,
-  //   };
-  // }
-  // throw new AppError(
-  //   403,
-  //   ErrorCode.FORBIDDEN,
-  //   "You do not have permission to add members to this workspace",
-  // );
-};
+// const inviteMember = async (workspaceId: string, userId: string, targetUserId: string) => {
+// const currentUsereMembership = await workspaceRepository.findMembershipByUserAndWorkspace(
+//   userId,
+//   workspaceId,
+// );
+// const workspace = await workspaceRepository.findById(workspaceId);
+// if (!workspace) {
+//   throw new AppError(404, ErrorCode.WORKSPACE_NOT_FOUND, "Workspace not found");
+// }
+// const isWorkspacePublic = workspace?.isPublic;
+// if (currentUsereMembership?.role === "OWNER" || isWorkspacePublic) {
+//   await workspaceRepository.createMember(workspaceId, targetUserId, "MEMBER");
+//   return {
+//     message: `User '${targetUserId}' added to workspace.`,
+//   };
+// }
+// throw new AppError(
+//   403,
+//   ErrorCode.FORBIDDEN,
+//   "You do not have permission to add members to this workspace",
+// );
+// };
 
 // joinPublicWorkspace(workspaceId, userId)
 // check isPublic
@@ -85,7 +85,7 @@ const getWorkspaceMembers = async (workspaceId: string) => {
 
 export const workspaceService: WorkspaceService = {
   createWorkspace,
-  inviteMember,
+  // inviteMember,
   getUserWorkspaces,
   getWorkspaceMembers,
 };

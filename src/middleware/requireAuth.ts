@@ -13,7 +13,7 @@ export const requireAuth: RequestHandler = (req, _res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    const payload = verifyAccessToken(token);  // Returns JWTPayload
+    const payload = verifyAccessToken(token);
     req.user = payload;
     next();
   } catch (error) {
@@ -29,6 +29,10 @@ export const requireAuth: RequestHandler = (req, _res, next) => {
 
     if (err.name === "NotBeforeError") {
       throw new AppError(401, ErrorCode.TOKEN_NOT_ACTIVE, "Token not active yet");
+    }
+
+    if (err.name === "ZodError") {
+      throw new AppError(401, ErrorCode.INVALID_TOKEN, "Invalid access token");
     }
 
     // Fallback

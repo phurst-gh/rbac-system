@@ -27,17 +27,11 @@
     "paths": {
       "@/env": ["env.ts"],
       "@/shared/*": ["src/shared/*"],
+      "@/test/*": ["src/test/*"],
       "@/domains/*": ["src/domains/*"],
       "@/lib/*": ["src/lib/*"]
     }
   },
-  "include": [
-    "src/**/*",
-    "prisma/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "database/generated"
-  ]
+  "include": ["src/**/*", "prisma/**/*.ts"],
+  "exclude": ["node_modules", "dist", "database/generated"]
 }

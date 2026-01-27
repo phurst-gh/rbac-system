@@ -1,16 +1,15 @@
 // This file cointains Express request handlers (controllers)
 
 import type { Request, Response } from "express";
-import { AppError } from "@/shared/errors/AppError";
-import { ErrorCode } from "@/shared/errors/ErrorCode";
+import { requireUser } from "@/shared/auth/requireUser";
+// import { AppError } from "@/shared/errors/AppError";
+// import { ErrorCode } from "@/shared/errors/ErrorCode";
 import { workspaceService } from "../services/workspaceService";
 
 const createWorkspace = async (req: Request, res: Response) => {
   const workspaceName: string = req.body.name;
   const isPublic: boolean = req.body.isPublic;
-  const userId = req.user?.sub;
-
-  if (!userId) throw new AppError(401, ErrorCode.UNAUTHORISED, "Missing user");
+  const { sub: userId } = requireUser(req);
 
   const response = await workspaceService.createWorkspace(workspaceName, isPublic, userId);
 
@@ -20,16 +19,10 @@ const createWorkspace = async (req: Request, res: Response) => {
   });
 };
 
-const getWorkspace = async (req: Request, res: Response) => {
-  // To be implemented
-};
+// const getWorkspace = async (req: Request, res: Response) => {};
 
 const listUserMemberships = async (req: Request, res: Response) => {
-  const userId: string = req.user?.sub;
-
-  if (!userId) {
-    throw new AppError(400, ErrorCode.BAD_REQUEST, "Missing userId parameter");
-  }
+  const { sub: userId } = requireUser(req);
 
   const workspaces = await workspaceService.getUserWorkspaces(userId);
 
@@ -50,22 +43,22 @@ const listWorkspaceMembers = async (req: Request, res: Response) => {
   });
 };
 
-const addMemberToWorkspace = async (req: Request, res: Response) => {
-  // 1. Get workspace
-  const workspaceId: string = req.params.workspaceId;
-  const userId: string = req.user?.sub;
-  const targetUserId: string = req.body.userId;
+// const addMemberToWorkspace = async (req: Request, res: Response) => {
+//   // 1. Get workspace
+//   const workspaceId: string = req.params.workspaceId;
+//   const { sub: userId } = requireUser(req);
+//   const targetUserId: string = req.body.userId;
 
-  if (!targetUserId) {
-    throw new AppError(400, ErrorCode.BAD_REQUEST, "Missing targetUserId");
-  }
+//   if (!targetUserId) {
+//     throw new AppError(400, ErrorCode.BAD_REQUEST, "Missing targetUserId");
+//   }
 
-  const response = await workspaceService.createMember(workspaceId, userId, targetUserId);
+//   const response = await workspaceService.createMember(workspaceId, userId, targetUserId);
 
-  res.status(200).json({
-    status: "success",
-    result: response,
-  });
-};
+//   res.status(200).json({
+//     status: "success",
+//     result: response,
+//   });
+// };
 
-export { createWorkspace, listUserMemberships, listWorkspaceMembers, addMemberToWorkspace };
+export { createWorkspace, listUserMemberships, listWorkspaceMembers };

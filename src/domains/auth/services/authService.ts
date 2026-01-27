@@ -3,7 +3,6 @@
 import { Role } from "@prisma/client";
 import { AppError } from "@/shared/errors/AppError";
 import { ErrorCode } from "@/shared/errors/ErrorCode";
-import { logger } from "@/shared/lib/pino-logger";
 import type { ApiUser } from "@/shared/types/express";
 import { hashPassword, verifyPassword, verifyRefreshToken } from "../lib";
 import { userRepository } from "../repositories/userRepository";
@@ -144,7 +143,7 @@ const refreshToken = async (token: string): Promise<RefreshResult> => {
   }
 };
 
-const logout = async (refreshToken: string): Promise<void> => {
+const logout = async (): Promise<void> => {
   // The main work happens in the controller (clearing the cookie)
   // This is just for potential future features like:
   // - Logging the logout event
