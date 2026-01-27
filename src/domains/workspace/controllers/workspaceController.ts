@@ -24,8 +24,8 @@ const getWorkspace = async (req: Request, res: Response) => {
   // To be implemented
 };
 
-const listUserWorkspaces = async (req: Request, res: Response) => {
-  const userId: string = req.params.userId;
+const listUserMemberships = async (req: Request, res: Response) => {
+  const userId: string = req.user?.sub;
 
   if (!userId) {
     throw new AppError(400, ErrorCode.BAD_REQUEST, "Missing userId parameter");
@@ -36,6 +36,17 @@ const listUserWorkspaces = async (req: Request, res: Response) => {
   res.status(200).json({
     status: "success",
     result: workspaces,
+  });
+};
+
+const listWorkspaceMembers = async (req: Request, res: Response) => {
+  const workspaceId: string = req.params.workspaceId;
+
+  const members = await workspaceService.getWorkspaceMembers(workspaceId);
+
+  res.status(200).json({
+    status: "success",
+    result: members,
   });
 };
 
@@ -57,4 +68,4 @@ const addMemberToWorkspace = async (req: Request, res: Response) => {
   });
 };
 
-export { createWorkspace, listUserWorkspaces, addMemberToWorkspace };
+export { createWorkspace, listUserMemberships, listWorkspaceMembers, addMemberToWorkspace };

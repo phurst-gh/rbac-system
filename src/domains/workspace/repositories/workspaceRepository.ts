@@ -84,6 +84,13 @@ const workspaceRepository = {
       },
     }),
 
+  findMembersByWorkspace: async (workspaceId: string) =>
+    await prisma.workspaceMember.findMany({
+      where: {
+        workspaceId,
+      },
+    }),
+
   // delete workspace
   // createMember
   // remove member

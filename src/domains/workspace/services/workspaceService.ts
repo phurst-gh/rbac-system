@@ -14,6 +14,7 @@ type WorkspaceService = {
   createWorkspace(name: string, isPublic: boolean, userId: string): Promise<Workspace>;
   inviteMember(workspaceId: string, targetUserId: string, currentUserId: string): Promise<void>;
   getUserWorkspaces(userId: string): Promise<Workspace[]>;
+  getWorkspaceMembers(workspaceId: string): Promise<any[]>;
 };
 
 const createWorkspace = async (name: string, isPublic: boolean, userId: string) => {
@@ -74,12 +75,17 @@ const inviteMember = async (workspaceId: string, userId: string, targetUserId: s
 
 const getUserWorkspaces = async (userId: string) => {
   const userWorkspaces = await workspaceRepository.findAllByUser(userId);
-
   return userWorkspaces;
+};
+
+const getWorkspaceMembers = async (workspaceId: string) => {
+  const members = await workspaceRepository.findMembersByWorkspace(workspaceId);
+  return members;
 };
 
 export const workspaceService: WorkspaceService = {
   createWorkspace,
   inviteMember,
   getUserWorkspaces,
+  getWorkspaceMembers,
 };
