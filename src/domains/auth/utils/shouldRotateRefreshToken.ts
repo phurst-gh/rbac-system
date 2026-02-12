@@ -24,7 +24,6 @@ const shouldRotateRefreshToken = (
   const now = Math.floor(Date.now() / 1000); // Convert to seconds (JWT standard)
   const tokenAge = now - payload.iat;
   const tokenLifetime = payload.exp - payload.iat;
-  // explain this maths to me.
 
   return tokenAge > tokenLifetime * rotationThreshold;
 };

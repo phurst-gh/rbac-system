@@ -25,6 +25,7 @@ const userRepository = {
         email: true,
         createdAt: true,
         role: true,
+        maxWorkspaces: true,
       },
     }),
 

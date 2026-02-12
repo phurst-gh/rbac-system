@@ -59,14 +59,12 @@ const envSchema = z.object({
   COOKIE_DOMAIN: z
     .string()
     .optional()
-    .transform(val => val && val.length > 0 ? val : undefined),
+    .transform((val) => (val && val.length > 0 ? val : undefined)),
   COOKIE_HTTP_ONLY: z
     .string()
     .default("true")
-    .transform(val => val === "true"), // Security: prevent XSS access to cookies
-  COOKIE_SAME_SITE: z
-    .enum(["strict", "lax", "none"])
-    .default("lax"), // CSRF protection
+    .transform((val) => val === "true"), // Security: prevent XSS access to cookies
+  COOKIE_SAME_SITE: z.enum(["strict", "lax", "none"]).default("lax"), // CSRF protection
 });
 
 export type Env = z.infer<typeof envSchema>;

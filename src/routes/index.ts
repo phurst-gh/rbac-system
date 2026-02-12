@@ -35,7 +35,7 @@ router.get("/health", (_req, res) => {
 });
 
 router.use("/auth", authRouter);
-router.use("/workspace", requireAuth, workspaceRouter);
+router.use("/workspace", workspaceRouter);
 // router.use("/users", userRouter);
 // router.use("/rbac", rbacRouter);
 

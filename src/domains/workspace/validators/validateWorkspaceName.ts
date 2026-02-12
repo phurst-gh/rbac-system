@@ -4,7 +4,7 @@ import { ErrorCode } from "@/shared/errors/ErrorCode";
 
 export const validateWorkspaceName = (name: string) => {
   const validatedName = workspaceNameSchema.safeParse({ name });
-  
+
   if (!validatedName.success) {
     // Aggregate all error messages, there are multiple possible validation failures
     const errorMessage = validatedName.error.issues.map(({ message }) => message).join(", ");

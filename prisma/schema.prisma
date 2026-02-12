@@ -18,16 +18,30 @@ enum WorkspaceRole {
   MEMBER
 }
 
+enum NotificationType {
+  WORKSPACE_INVITE
+}
+
+enum InvitationStatus {
+  PENDING
+  ACCEPTED
+  DECLINED
+}
+
 model User {
   id          String   @id @default(uuid())
   email        String   @unique
   passwordHash String
   role      Role  @default(USER)
   isActive     Boolean  @default(true)
+  maxWorkspaces Int @default(10)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
   memberships  WorkspaceMember[]
+  notifications Notification[]
+  sentInvitations WorkspaceInvitation[] @relation("SentInvitations")
+  receivedInvitations WorkspaceInvitation[] @relation("ReceivedInvitations")
 }
 
 model Workspace {
@@ -39,6 +53,7 @@ model Workspace {
 
   members   WorkspaceMember[]
   projects  Project[]
+  invitations WorkspaceInvitation[]
 }
 
 model WorkspaceMember {
@@ -66,4 +81,37 @@ model Project {
   workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 
   @@index([workspaceId])
+}
+
+model WorkspaceInvitation {
+  id          String          @id @default(uuid())
+  workspaceId String
+  inviterId   String
+  inviteeId   String
+  status      InvitationStatus @default(PENDING)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  inviter   User     @relation("SentInvitations", fields: [inviterId], references: [id], onDelete: Cascade)
+  invitee   User     @relation("ReceivedInvitations", fields: [inviteeId], references: [id], onDelete: Cascade)
+
+  @@unique([workspaceId, inviteeId, status])
+  @@index([inviteeId])
+  @@index([workspaceId])
+  @@index([status])
+}
+
+model Notification {
+  id        String            @id @default(uuid())
+  userId    String
+  type      NotificationType
+  data      Json
+  readAt    DateTime?
+  createdAt DateTime          @default(now())
+
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([createdAt])
 }
